@@ -2,20 +2,26 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 steps:
-# Checkout your repo (this is automatic, but good to be explicit)
-- checkout: self
+# Ensure Python 3 is available
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
 
-# Quick test
-- script: echo "Hello, world!"
-  displayName: 'Run a one-line script'
+# Debug - confirm files are present
+- script: ls -R $(Build.SourcesDirectory)
+  displayName: 'List repo files'
 
-# List files so you can confirm jk.py is there
-- script: ls -R
-  displayName: 'List files for debugging'
-
-# Run python file (update path if jk.py is inside a folder)
+# Run your Python script
 - script: python $(Build.SourcesDirectory)/jk.py
-  displayName: 'Run python code'
+  displayName: 'Run jk.py'
+
+# Publish pipeline artifacts
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.SourcesDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
