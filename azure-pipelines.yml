@@ -16,7 +16,7 @@ steps:
   displayName: 'List repo files'
 
 # Run your Python script
-- script: python $(Build.SourcesDirectory)/jk.py
+- script: python jk.py
   displayName: 'Run jk.py'
 
 # Publish pipeline artifacts
